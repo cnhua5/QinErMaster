@@ -8,6 +8,13 @@
 package cn.yu.master;
 
 public final class R {
+    public static final class anim {
+        public static final int activity_back_enter=0x7f040000;
+        public static final int activity_back_quit=0x7f040001;
+        public static final int activity_enter=0x7f040002;
+        public static final int activity_quit=0x7f040003;
+        public static final int fade=0x7f040004;
+    }
     public static final class attr {
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
@@ -122,16 +129,16 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int viewBehind=0x7f010002;
     }
     public static final class color {
-        public static final int black=0x7f050004;
-        public static final int blue=0x7f050002;
-        public static final int green=0x7f050001;
-        public static final int red=0x7f050000;
-        public static final int white=0x7f050003;
+        public static final int black=0x7f060004;
+        public static final int blue=0x7f060002;
+        public static final int green=0x7f060001;
+        public static final int red=0x7f060000;
+        public static final int white=0x7f060003;
     }
     public static final class dimen {
-        public static final int list_padding=0x7f060001;
-        public static final int shadow_width=0x7f060002;
-        public static final int slidingmenu_offset=0x7f060000;
+        public static final int list_padding=0x7f070001;
+        public static final int shadow_width=0x7f070002;
+        public static final int slidingmenu_offset=0x7f070000;
     }
     public static final class drawable {
         public static final int eagle=0x7f020000;
@@ -150,33 +157,37 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int toucan=0x7f02000d;
         public static final int turkey=0x7f02000e;
         public static final int vulture=0x7f02000f;
+        public static final int welcome=0x7f020010;
     }
     public static final class id {
-        public static final int calendar_day=0x7f04000b;
-        public static final int calendar_detail_event=0x7f04000d;
-        public static final int calendar_detail_record=0x7f04000e;
-        public static final int calendar_detail_title=0x7f04000c;
-        public static final int content_frame=0x7f040005;
-        public static final int fullscreen=0x7f040003;
-        public static final int info_grid_tv=0x7f04000f;
-        public static final int left=0x7f040000;
-        public static final int left_calendar_details=0x7f04000a;
-        public static final int left_calendar_gv=0x7f040009;
-        public static final int left_calendar_gv_day=0x7f040008;
-        public static final int left_calendar_gv_month=0x7f040007;
-        public static final int left_calendar_gv_year=0x7f040006;
-        public static final int margin=0x7f040002;
-        public static final int menu_frame=0x7f040010;
-        public static final int menu_frame_two=0x7f040011;
-        public static final int menu_settings=0x7f040015;
-        public static final int right=0x7f040001;
-        public static final int row_icon=0x7f040012;
-        public static final int row_title=0x7f040013;
-        public static final int selected_view=0x7f040004;
-        public static final int slidingmenumain=0x7f040014;
+        public static final int calendar_day=0x7f05000b;
+        public static final int calendar_detail_event=0x7f05000d;
+        public static final int calendar_detail_record=0x7f05000e;
+        public static final int calendar_detail_title=0x7f05000c;
+        public static final int content_frame=0x7f050005;
+        public static final int fullscreen=0x7f050003;
+        public static final int info_grid_tv=0x7f05000f;
+        public static final int left=0x7f050000;
+        public static final int left_calendar_details=0x7f05000a;
+        public static final int left_calendar_gv=0x7f050009;
+        public static final int left_calendar_gv_day=0x7f050008;
+        public static final int left_calendar_gv_month=0x7f050007;
+        public static final int left_calendar_gv_year=0x7f050006;
+        public static final int margin=0x7f050002;
+        public static final int menu_frame=0x7f050010;
+        public static final int menu_frame_two=0x7f050011;
+        public static final int menu_settings=0x7f050018;
+        public static final int right=0x7f050001;
+        public static final int row_icon=0x7f050015;
+        public static final int row_title=0x7f050016;
+        public static final int selected_view=0x7f050004;
+        public static final int slidingmenumain=0x7f050017;
+        public static final int welcome_back=0x7f050013;
+        public static final int welcome_flipper=0x7f050012;
+        public static final int welcome_forg=0x7f050014;
     }
     public static final class integer {
-        public static final int num_cols=0x7f070000;
+        public static final int num_cols=0x7f080000;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -187,33 +198,34 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int list=0x7f030005;
         public static final int menu_frame=0x7f030006;
         public static final int menu_frame_two=0x7f030007;
-        public static final int row=0x7f030008;
-        public static final int slidingmenumain=0x7f030009;
+        public static final int qin_welcome=0x7f030008;
+        public static final int row=0x7f030009;
+        public static final int slidingmenumain=0x7f03000a;
     }
     public static final class menu {
-        public static final int activity_main=0x7f0a0000;
+        public static final int activity_main=0x7f0b0000;
     }
     public static final class string {
-        public static final int anim_fold=0x7f08000d;
-        public static final int anim_scale=0x7f08000c;
-        public static final int anim_slide=0x7f08000e;
-        public static final int anim_zoom=0x7f08000b;
-        public static final int animations=0x7f08000a;
-        public static final int app_name=0x7f080000;
-        public static final int attach=0x7f080006;
-        public static final int changing_fragments=0x7f08000f;
-        public static final int general=0x7f080004;
-        public static final int hello_world=0x7f080002;
-        public static final int left=0x7f080011;
-        public static final int left_and_right=0x7f080013;
-        public static final int menu_settings=0x7f080001;
-        public static final int properties=0x7f080003;
-        public static final int responsive_ui=0x7f080010;
-        public static final int right=0x7f080012;
-        public static final int title_bar=0x7f080007;
-        public static final int title_bar_content=0x7f080009;
-        public static final int title_bar_slide=0x7f080008;
-        public static final int viewpager=0x7f080005;
+        public static final int anim_fold=0x7f09000d;
+        public static final int anim_scale=0x7f09000c;
+        public static final int anim_slide=0x7f09000e;
+        public static final int anim_zoom=0x7f09000b;
+        public static final int animations=0x7f09000a;
+        public static final int app_name=0x7f090000;
+        public static final int attach=0x7f090006;
+        public static final int changing_fragments=0x7f09000f;
+        public static final int general=0x7f090004;
+        public static final int hello_world=0x7f090002;
+        public static final int left=0x7f090011;
+        public static final int left_and_right=0x7f090013;
+        public static final int menu_settings=0x7f090001;
+        public static final int properties=0x7f090003;
+        public static final int responsive_ui=0x7f090010;
+        public static final int right=0x7f090012;
+        public static final int title_bar=0x7f090007;
+        public static final int title_bar_content=0x7f090009;
+        public static final int title_bar_slide=0x7f090008;
+        public static final int viewpager=0x7f090005;
     }
     public static final class style {
         /** 
@@ -237,11 +249,11 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f090000;
+        public static final int AppBaseTheme=0x7f0a0000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f090001;
+        public static final int AppTheme=0x7f0a0001;
     }
     public static final class styleable {
         /** Attributes that can be used with a SlidingMenu.

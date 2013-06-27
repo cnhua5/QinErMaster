@@ -30,7 +30,7 @@ public abstract class BaseActivity extends SlidingFragmentActivity {
 		setBehindContentView(R.layout.menu_frame);
 		if (savedInstanceState == null) {
 			FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
-			mFrag = new LeftListFragment(new String[]{"二维码扫描","日历","其他"}, new LeftListFragment.ActivityCallBack() {
+			mFrag = new LeftListFragment(new String[]{"@@@@@","鏃ュ巻","鍏朵粬"}, new LeftListFragment.ActivityCallBack() {
 				
 				@Override
 				public void callBack(int position) {

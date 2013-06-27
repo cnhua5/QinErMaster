@@ -62,9 +62,9 @@ public class CalendarDBManager extends DBManager {
 	}
 
 	private String formatDay(String day) {
-		day = day.replace("!", "Äê");
-		day = day.replace("@", "ÔÂ");
-		day = day.replace("#", "ÈÕ");
+		day = day.replace("!", "å¹´");
+		day = day.replace("@", "æœˆ");
+		day = day.replace("#", "æ—¥");
 		return day;
 	}
 

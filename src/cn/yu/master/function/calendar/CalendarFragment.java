@@ -111,9 +111,9 @@ public class CalendarFragment extends Fragment {
 		currentYear = calendar.get(Calendar.YEAR);
 		currentMonth = calendar.get(Calendar.MONTH);
 		currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-		currYearView.setText("" + currentYear + "Äê");
-		currMonthView.setText("" + (currentMonth + 1) + "ÔÂ");
-		currDayView.setText("" + currentDay + "ÈÕ");
+		currYearView.setText("" + currentYear + "å¹´");
+		currMonthView.setText("" + (currentMonth + 1) + "æœˆ");
+		currDayView.setText("" + currentDay + "æ—¥");
 		GridAdapter mAdapter = new GridAdapter(getActivity(), days);
 		calculateDays(currentYear, currentMonth);
 		mCalendarGrid.setAdapter(mAdapter);
@@ -139,7 +139,7 @@ public class CalendarFragment extends Fragment {
 		}
 		List<String> listDay = new ArrayList<String>();
 
-		// ---------------ÉÏÔÂ--------------------
+		// ---------------ï¿½ï¿½ï¿½ï¿½--------------------
 		String month = currentMonth < 10 ? "0" + (currentMonth) : String
 				.valueOf(currentMonth);
 		for (int i = week, day = prevMonthDays; i > 1; i--, day--) {
@@ -157,7 +157,7 @@ public class CalendarFragment extends Fragment {
 		for (int i = listDay.size() - 1; i >= 0; i--) {
 			listDays.add(listDay.get(i));
 		}
-		// -----------------±¾ÔÂ------------------
+		// -----------------ï¿½ï¿½ï¿½ï¿½------------------
 		month = currentMonth < 9 ? "0" + (currentMonth + 1) : String
 				.valueOf(currentMonth + 1);
 		for (int day = 1, i = week - 1; day <= monthDays; day++, i++) {
@@ -169,7 +169,7 @@ public class CalendarFragment extends Fragment {
 			}
 			listDays.add(currentYear + "!" + month + "@" + d + "#");
 		}
-		// -----------------ÏÂÔÂ------------------
+		// -----------------ï¿½ï¿½ï¿½ï¿½------------------
 		month = currentMonth < 8 ? "0" + (currentMonth + 2) : String
 				.valueOf(currentMonth + 2);
 		for (int i = week + monthDays - 1, day = 1; i < days.length; i++, day++) {
@@ -268,9 +268,6 @@ public class CalendarFragment extends Fragment {
 			return position;
 		}
 
-		/**
-		 * ÈÕÀú¡¢Êý¾Ý
-		 */
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = views.get(position);
@@ -281,7 +278,6 @@ public class CalendarFragment extends Fragment {
 				view = convertView;
 				views.put(position, view);
 				if (position == days.length - 1) {
-					// µ±Êý¾Ý¼ÓÔØÍê£¬·¢ËÍÏûÏ¢
 				}
 			}
 

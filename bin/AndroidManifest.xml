@@ -17,16 +17,25 @@
             android:name="cn.yu.master.LeftAndRightActivity"
             android:label="@string/app_name" >
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="cn.yu.master.WelcomeActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <activity android:name="cn.yu.master.function.calendar.CalendarDayDetailActivity">
-            <intent-filter >
-                <action android:name="yu.master.calendar.detail"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+        <activity android:name="cn.yu.master.function.calendar.CalendarDayDetailActivity" >
+            <intent-filter>
+                <action android:name="yu.master.calendar.detail" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>
