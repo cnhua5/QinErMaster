@@ -31,13 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="cn.yu.master.function.calendar.CalendarDayDetailActivity" >
-            <intent-filter>
-                <action android:name="yu.master.calendar.detail" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

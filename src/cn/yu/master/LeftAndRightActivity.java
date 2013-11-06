@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.widget.Toast;
-import cn.yu.master.function.calendar.CalendarFragment;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
@@ -27,7 +26,6 @@ public class LeftAndRightActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		DBManager.initDBs(getApplicationContext());
 		mSlidingMenu = getSlidingMenu();
 		mSlidingMenu.setMode(SlidingMenu.LEFT_RIGHT);
 		mSlidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
@@ -56,7 +54,6 @@ public class LeftAndRightActivity extends BaseActivity {
 			mSlidingMenu.setStatic(false);
 			break;
 		case 1:
-			replace(R.id.content_frame, new CalendarFragment());
 			mSlidingMenu.setStatic(false);
 			break;
 		case 2:
