@@ -10,6 +10,9 @@ import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import cn.yu.master.activities.SuperImageFragment;
+import cn.yu.master.viewers.SuperImageViewer;
+
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class LeftAndRightActivity extends BaseActivity {
@@ -54,6 +57,7 @@ public class LeftAndRightActivity extends BaseActivity {
 			mSlidingMenu.setStatic(false);
 			break;
 		case 1:
+			replace(R.id.content_frame, new SuperImageFragment());
 			mSlidingMenu.setStatic(false);
 			break;
 		case 2:
