@@ -5,13 +5,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.widget.Toast;
-
 import cn.yu.master.activities.SuperImageFragment;
-import cn.yu.master.viewers.SuperImageViewer;
+import cn.yu.master.utils.DirectoryOperate;
+import cn.yu.master.viewers.FileViewerFragment;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
@@ -30,19 +29,17 @@ public class LeftAndRightActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mSlidingMenu = getSlidingMenu();
-		mSlidingMenu.setMode(SlidingMenu.LEFT_RIGHT);
+		mSlidingMenu.setMode(SlidingMenu.LEFT);
 		mSlidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 		mFragmentManager = getSupportFragmentManager();
 		setContentView(R.layout.content_frame);
 
 		replace(R.id.content_frame, new SampleListFragment(new String[] {
 				"content!!!!", "content!!!!" }));
-
-		mSlidingMenu.setSecondaryMenu(R.layout.menu_frame_two);
-		mSlidingMenu.setSecondaryShadowDrawable(R.drawable.shadowright);
-
-		replace(R.id.menu_frame_two, new SampleListFragment(new String[] {
-				"00!!!!", "00!!!!" }));
+		// mSlidingMenu.setSecondaryMenu(R.layout.menu_frame_two);
+		// mSlidingMenu.setSecondaryShadowDrawable(R.drawable.shadowright);
+		// replace(R.id.menu_frame_two, new SampleListFragment(new String[] {
+		// "00!!!!", "00!!!!" }));
 		overridePendingTransition(R.anim.activity_enter, R.anim.activity_quit);
 		mHandler.sendEmptyMessage(MSG_FULL_SCREEN);
 		mHandler.sendEmptyMessageDelayed(MSG_QUIT_FULL_SCREEN, 2000);
@@ -61,8 +58,11 @@ public class LeftAndRightActivity extends BaseActivity {
 			mSlidingMenu.setStatic(false);
 			break;
 		case 2:
-			replace(R.id.content_frame, new SampleListFragment(new String[] {
-					"!!!!!", "!!!!!!" }));
+			FileViewerFragment ffragment = new FileViewerFragment();
+			Bundle bundle = new Bundle();
+			bundle.putString("file_dir", DirectoryOperate.INTERNAL_SDCARD);
+			ffragment.setArguments(bundle);
+			replace(R.id.content_frame, ffragment);
 			mSlidingMenu.setStatic(false);
 			break;
 		default:

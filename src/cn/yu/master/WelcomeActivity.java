@@ -15,6 +15,8 @@ public class WelcomeActivity extends Activity {
 
 	private static final String TAG = "WelcomeActivity";
 	private static final int ANIM_START = 0;
+	
+	private boolean Debuging = true;
 
 	private Animation fadeIn;
 	private ImageView forg;
@@ -23,6 +25,10 @@ public class WelcomeActivity extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case ANIM_START:
+				if(Debuging){
+					enterMain();
+					return;
+				}
 				forg.startAnimation(fadeIn);
 				break;
 			default:
@@ -54,13 +60,17 @@ public class WelcomeActivity extends Activity {
 
 			@Override
 			public void onAnimationEnd(Animation animation) {
-				forg.setVisibility(View.GONE);
-				Intent intent = new Intent(WelcomeActivity.this,
-						LeftAndRightActivity.class);
-				startActivity(intent);
-				finish();
+				enterMain();
 			}
 		});
 		mHander.sendEmptyMessageDelayed(ANIM_START, 1000);
+	}
+	
+	private void enterMain() {
+		forg.setVisibility(View.GONE);
+		Intent intent = new Intent(WelcomeActivity.this,
+				LeftAndRightActivity.class);
+		startActivity(intent);
+		finish();
 	}
 }
