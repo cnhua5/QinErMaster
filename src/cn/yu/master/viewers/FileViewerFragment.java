@@ -19,6 +19,7 @@ import android.widget.Toast;
 import cn.yu.master.R;
 import cn.yu.master.entries.FileObject;
 import cn.yu.master.utils.DirectoryOperate;
+import cn.yu.master.utils.DirectoryOperate.RecordDirChangeListener;
 import cn.yu.master.utils.MimeUtils;
 
 public class FileViewerFragment extends ListFragment {
@@ -67,17 +68,21 @@ public class FileViewerFragment extends ListFragment {
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
 				FileObject obj = mAdapter.getItem(position);
-				if (mDirectoryOperate.delete(new File(obj.path))) {
-					list_dirs = mDirectoryOperate.ls_al(currDir);
-					mAdapter.notifyDataSetChanged();
-					Toast.makeText(getActivity(), "Delete finish....", 1000)
-							.show();
-					return true;
-				}
+				mDirectoryOperate.rm_rf(obj.path, mRecordDirChangeListener);
 				return true;
 			}
 		});
 	}
+
+	private DirectoryOperate.RecordDirChangeListener mRecordDirChangeListener = new RecordDirChangeListener() {
+
+		@Override
+		public void onRecordDirChanged(int recordId) {
+			list_dirs = mDirectoryOperate.ls_al(currDir);
+			mAdapter.notifyDataSetChanged();
+			Toast.makeText(getActivity(), "Delete finish....", 1000).show();
+		}
+	};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
