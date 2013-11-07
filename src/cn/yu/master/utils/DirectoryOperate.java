@@ -3,9 +3,13 @@ package cn.yu.master.utils;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import android.util.Log;
+
 import cn.yu.master.entries.FileObject;
 
 public class DirectoryOperate {
+
+	public static final String TAG = "DirectoryOperate";
 
 	private static final int RECORD_DIRS = 2;
 
@@ -19,6 +23,7 @@ public class DirectoryOperate {
 
 	public FileObject[] ls_al(String dir) {
 		File[] fs = showHide(dir, showHide);
+		Log.e(TAG, "list " + dir);
 
 		FileObject[] files = new FileObject[fs.length];
 
@@ -58,19 +63,21 @@ public class DirectoryOperate {
 
 	public boolean delete(File file) {
 		boolean isSuccess = false;
+		Log.e(TAG, "start delete");
 		if (file.isFile()) {
 			isSuccess = file.delete();
+			Log.e(TAG, "delete file " + isSuccess);
 		}
 		if (file.isDirectory()) {
 			File[] childFiles = file.listFiles();
 			if (childFiles == null || childFiles.length == 0) {
 				isSuccess = file.delete();
 			}
-
 			for (int i = 0; i < childFiles.length; i++) {
 				delete(childFiles[i]);
 			}
 			isSuccess = file.delete();
+			Log.e(TAG, "delete dir " + isSuccess);
 		}
 		return isSuccess;
 	}

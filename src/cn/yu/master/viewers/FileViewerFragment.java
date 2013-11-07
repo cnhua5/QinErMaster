@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.yu.master.R;
 import cn.yu.master.entries.FileObject;
 import cn.yu.master.utils.DirectoryOperate;
@@ -56,6 +58,23 @@ public class FileViewerFragment extends ListFragment {
 					return;
 				}
 				MimeUtils.openFile(getActivity(), new File(obj.path));
+			}
+		});
+
+		mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				FileObject obj = mAdapter.getItem(position);
+				if (mDirectoryOperate.delete(new File(obj.path))) {
+					list_dirs = mDirectoryOperate.ls_al(currDir);
+					mAdapter.notifyDataSetChanged();
+					Toast.makeText(getActivity(), "Delete finish....", 1000)
+							.show();
+					return true;
+				}
+				return true;
 			}
 		});
 	}
