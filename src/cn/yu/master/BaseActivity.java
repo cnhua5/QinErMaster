@@ -3,18 +3,20 @@ package cn.yu.master;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
+import android.view.KeyEvent;
+
+import cn.yu.master.activities.FragmentKeyListener;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
 public abstract class BaseActivity extends SlidingFragmentActivity {
-	
+
 	private static final String TAG = "BaseActivity";
 
 	private int mTitleRes;
 	protected ListFragment mFrag;
-	
+
 	public BaseActivity(int mTitleRes) {
 		super();
 		this.mTitleRes = mTitleRes;
@@ -29,18 +31,22 @@ public abstract class BaseActivity extends SlidingFragmentActivity {
 		// set the Behind View
 		setBehindContentView(R.layout.menu_frame);
 		if (savedInstanceState == null) {
-			FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
-			mFrag = new LeftListFragment(new String[]{"@@@@@","Images","其他"}, new LeftListFragment.ActivityCallBack() {
-				
-				@Override
-				public void callBack(int position) {
-					switchPageViewContent(position);
-				}
-			});
+			FragmentTransaction t = this.getSupportFragmentManager()
+					.beginTransaction();
+			mFrag = new LeftListFragment(
+					new String[] { "@@@@@", "Images", "其他" },
+					new LeftListFragment.ActivityCallBack() {
+
+						@Override
+						public void callBack(int position) {
+							switchPageViewContent(position);
+						}
+					});
 			t.replace(R.id.menu_frame, mFrag);
 			t.commit();
 		} else {
-			mFrag = (ListFragment)this.getSupportFragmentManager().findFragmentById(R.id.menu_frame);
+			mFrag = (ListFragment) this.getSupportFragmentManager()
+					.findFragmentById(R.id.menu_frame);
 		}
 
 		// customize the SlidingMenu
@@ -51,6 +57,16 @@ public abstract class BaseActivity extends SlidingFragmentActivity {
 		sm.setFadeDegree(0.35f);
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 	}
-	
+
+	private FragmentKeyListener mListener;
+
+	public FragmentKeyListener getFragmentKeyListener() {
+		return mListener;
+	}
+
+	public void setFragmentKeyListener(FragmentKeyListener listener) {
+		mListener = listener;
+	}
+
 	public abstract void switchPageViewContent(int position);
 }

@@ -5,9 +5,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.widget.Toast;
+import cn.yu.master.activities.FragmentKeyListener;
 import cn.yu.master.activities.SuperImageFragment;
 import cn.yu.master.utils.DirectoryOperate;
 import cn.yu.master.viewers.FileViewerFragment;
@@ -20,6 +22,8 @@ public class LeftAndRightActivity extends BaseActivity {
 
 	private SlidingMenu mSlidingMenu;
 	private FragmentManager mFragmentManager;
+	private Fragment mCurrFragment;
+	private FileViewerFragment mFileViewerFragment;
 
 	public LeftAndRightActivity() {
 		super(R.string.left_and_right);
@@ -58,11 +62,12 @@ public class LeftAndRightActivity extends BaseActivity {
 			mSlidingMenu.setStatic(false);
 			break;
 		case 2:
-			FileViewerFragment ffragment = new FileViewerFragment();
+			mFileViewerFragment = new FileViewerFragment();
+			setFragmentKeyListener(mFileViewerFragment);
 			Bundle bundle = new Bundle();
 			bundle.putString("file_dir", DirectoryOperate.INTERNAL_SDCARD);
-			ffragment.setArguments(bundle);
-			replace(R.id.content_frame, ffragment);
+			mFileViewerFragment.setArguments(bundle);
+			replace(R.id.content_frame, mFileViewerFragment);
 			mSlidingMenu.setStatic(false);
 			break;
 		default:
@@ -71,6 +76,7 @@ public class LeftAndRightActivity extends BaseActivity {
 	}
 
 	private void replace(int rId, Fragment frag) {
+		mCurrFragment = frag;
 		mFragmentManager.beginTransaction().replace(rId, frag).commit();
 	}
 
@@ -115,8 +121,16 @@ public class LeftAndRightActivity extends BaseActivity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (null != getFragmentKeyListener()) {
+			if (mCurrFragment instanceof FileViewerFragment) {
+				if (mFileViewerFragment.onFragmentKeyDown(keyCode)) {
+					return false;
+				}
+			}
+		}
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
+			Log.e(TAG, "on  Activity  Key Back>>>>>>>>>>>>");
 			if (mSlidingMenu.isMenuShowing()) {
 				return false;
 			}
@@ -128,7 +142,7 @@ public class LeftAndRightActivity extends BaseActivity {
 			break;
 		}
 		return super.onKeyDown(keyCode, event);
-	}
+	};
 
 	private void setFullScreen() {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

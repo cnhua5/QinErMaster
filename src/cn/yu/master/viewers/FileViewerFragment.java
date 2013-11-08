@@ -5,6 +5,7 @@ import java.io.File;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.yu.master.BaseActivity;
 import cn.yu.master.R;
+import cn.yu.master.activities.FragmentKeyListener;
 import cn.yu.master.entries.FileObject;
 import cn.yu.master.utils.DirectoryOperate;
 import cn.yu.master.utils.DirectoryOperate.RecordDirChangeListener;
 import cn.yu.master.utils.MimeUtils;
 
-public class FileViewerFragment extends ListFragment {
+public class FileViewerFragment extends ListFragment implements
+		FragmentKeyListener {
 
 	private static final String TAG = "FileViewerFragment";
 
@@ -35,9 +39,12 @@ public class FileViewerFragment extends ListFragment {
 
 	private DirectoryOperate mDirectoryOperate;
 
+	private BaseActivity mContext;
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		mContext = (BaseActivity) getActivity();
 		mDirectoryOperate = new DirectoryOperate();
 		currDir = getArguments().getString("file_dir");
 		list_dirs = mDirectoryOperate.ls_al(currDir);
@@ -54,11 +61,13 @@ public class FileViewerFragment extends ListFragment {
 				FileObject obj = mAdapter.getItem(position);
 				if (obj.type == 0) {
 					currDir = obj.path;
+					mContext.setTitle(currDir);
 					list_dirs = mDirectoryOperate.ls_al(currDir);
 					mAdapter.notifyDataSetChanged();
 					return;
 				}
-				MimeUtils.openFile(getActivity(), new File(obj.path));
+				MimeUtils
+						.openFile(mContext, new File(currDir + "/" + obj.name));
 			}
 		});
 
@@ -77,10 +86,10 @@ public class FileViewerFragment extends ListFragment {
 	private DirectoryOperate.RecordDirChangeListener mRecordDirChangeListener = new RecordDirChangeListener() {
 
 		@Override
-		public void onRecordDirChanged(int recordId) {
+		public void onRecordDirChanged() {
 			list_dirs = mDirectoryOperate.ls_al(currDir);
 			mAdapter.notifyDataSetChanged();
-			Toast.makeText(getActivity(), "Delete finish....", 1000).show();
+			Toast.makeText(mContext, "Delete finish....", 1000).show();
 		}
 	};
 
@@ -121,9 +130,8 @@ public class FileViewerFragment extends ListFragment {
 			View view = convertView;
 			final ViewHolder holder;
 			if (null == convertView) {
-				view = LayoutInflater.from(
-						FileViewerFragment.this.getActivity()).inflate(
-						R.layout.row, null);
+				view = LayoutInflater.from(mContext)
+						.inflate(R.layout.row, null);
 				holder = new ViewHolder();
 				holder.imageView = (ImageView) view.findViewById(R.id.row_icon);
 				holder.textView = (TextView) view.findViewById(R.id.row_title);
@@ -135,5 +143,24 @@ public class FileViewerFragment extends ListFragment {
 			holder.imageView.setImageResource(R.id.row_icon);
 			return view;
 		}
+	}
+
+	@Override
+	public boolean onFragmentKeyDown(int keyCode) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK:
+			Log.e(TAG, "on  Fragment  Key Back>>>>>>>>>>>>");
+			if (mDirectoryOperate.isSDRootDir(currDir)) {
+				return false;
+			} else {
+				currDir = mDirectoryOperate.backToParentDir(currDir);
+				list_dirs = mDirectoryOperate.ls_al(currDir);
+				mAdapter.notifyDataSetChanged();
+				mContext.setTitle(currDir);
+			}
+		default:
+			break;
+		}
+		return true;
 	}
 }

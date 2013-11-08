@@ -6,6 +6,7 @@ public class FileObject {
 
 	public String path;
 	
+	//0 directory, 1 file
 	public int type;
 
 }

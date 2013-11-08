@@ -40,7 +40,7 @@ public class SuperStack<E> {
 			index = -1;
 		}
 		stack[++index] = obj;
-		Log.e(TAG, "push to index " + index);
+		Log.e(TAG, "change ---->stack " + index);
 	}
 
 	public E peek() {

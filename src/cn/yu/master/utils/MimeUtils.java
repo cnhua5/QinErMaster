@@ -9,9 +9,12 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
 public final class MimeUtils {
+	
+	private static final String TAG = "MimeUtils";
 
 	public static String MIMETYPE_UNKNOWN = "MIMETPE_UNKNOWN";
 
@@ -33,6 +36,7 @@ public final class MimeUtils {
 			mimeType = "video/*";
 		else if (mimeType.compareTo(MIMETYPE_UNKNOWN) == 0 || mimeType == null)
 			mimeType = "application/*";
+		
 		intent.setDataAndType(Uri.fromFile(file), mimeType);
 		try {
 			((Activity) context).startActivity(intent);
@@ -406,6 +410,7 @@ public final class MimeUtils {
 		if (extension == null || extension.isEmpty()) {
 			return null;
 		}
+		Log.e(TAG, ">>>>>>>>>>>>>>receive file type = " + extension);
 		return extensionToMimeTypeMap.get(extension);
 	}
 

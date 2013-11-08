@@ -2,8 +2,9 @@ package cn.yu.master.utils;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import android.util.Log;
 import cn.yu.master.entries.FileObject;
@@ -12,9 +13,9 @@ public class DirectoryOperate {
 
 	public static final String TAG = "DirectoryOperate";
 
-	public static final String INTERNAL_SDCARD = "storage/sdcard0";
+	public static final String INTERNAL_SDCARD = "/storage/sdcard0";
 
-	public static final String EXTERNAL_SDCARD = "storage/sdcard1";
+	public static final String EXTERNAL_SDCARD = "/storage/sdcard1";
 
 	private boolean showHide = false;
 
@@ -22,6 +23,25 @@ public class DirectoryOperate {
 
 	public DirectoryOperate() {
 		dirPool = new SuperStack<HashMap<String, FileObject[]>>();
+	}
+
+	public String backToParentDir(String dir) {
+		if ("/".equals(dir)) {
+			return "/";
+		}
+		File file = new File(dir);
+		return file.getParent();
+	}
+
+	public void forwardToSubDir() {
+
+	}
+
+	public boolean isSDRootDir(String dir) {
+		if (dir.equals(INTERNAL_SDCARD) || dir.equals(EXTERNAL_SDCARD)) {
+			return true;
+		}
+		return false;
 	}
 
 	public FileObject[] ls_al(String dir) {
@@ -58,16 +78,26 @@ public class DirectoryOperate {
 	}
 
 	private void setDirPoolStack(String dir, FileObject[] fs) {
-		if (fs.length < 5) {
-			return;
-		}
+		// if (fs.length < 5) {
+		// return;
+		// }
 		for (int i = 0; i < SuperStack.INIT_SIZE; i++) {
 			HashMap<String, FileObject[]> one = dirPool.get(i);
-			if (null != one && one.keySet().contains(dir)) {
-				return;
+			if (one == null) {
+				Log.e(TAG, i + "  of pool is null!!!!!");
+			} else {
+				Set<String> set = one.keySet();
+				for (Iterator iterator = set.iterator(); iterator.hasNext();) {
+					String string = (String) iterator.next();
+					Log.e(TAG, i + "  of pool is " + string);
+				}
+				if (null != one && set.contains(dir)) {
+					return;
+				}
 			}
 		}
 		HashMap<String, FileObject[]> dirlist = new HashMap<String, FileObject[]>();
+		dirlist.put(dir, fs);
 		dirPool.push(dirlist);
 	}
 
@@ -107,15 +137,10 @@ public class DirectoryOperate {
 
 	private void checkIsRecordChanged(String dir,
 			RecordDirChangeListener listener) {
-//		if (dir.equals(record_dirs[0])) {
-//			listener.onRecordDirChanged(0);
-//		}
-//		if (dir.equals(record_dirs[1])) {
-//			listener.onRecordDirChanged(1);
-//		}
+		listener.onRecordDirChanged();
 	}
 
 	public interface RecordDirChangeListener {
-		public void onRecordDirChanged(int recordId);
+		public void onRecordDirChanged();
 	}
 }
