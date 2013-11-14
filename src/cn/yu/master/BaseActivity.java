@@ -3,8 +3,6 @@ package cn.yu.master;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
-import android.view.KeyEvent;
-
 import cn.yu.master.activities.FragmentKeyListener;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -21,6 +19,10 @@ public abstract class BaseActivity extends SlidingFragmentActivity {
 		super();
 		this.mTitleRes = mTitleRes;
 	}
+	
+	public void setActivityTitle(String title) {
+		setTitle(title);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public abstract class BaseActivity extends SlidingFragmentActivity {
 			FragmentTransaction t = this.getSupportFragmentManager()
 					.beginTransaction();
 			mFrag = new LeftListFragment(
-					new String[] { "@@@@@", "Images", "其他" },
+					new String[] { "读一读", "Images", "其他" },
 					new LeftListFragment.ActivityCallBack() {
 
 						@Override

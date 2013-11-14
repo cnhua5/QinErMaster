@@ -61,7 +61,7 @@ public class FileViewerFragment extends ListFragment implements
 				FileObject obj = mAdapter.getItem(position);
 				if (obj.type == 0) {
 					currDir = obj.path;
-					mContext.setTitle(currDir);
+					mContext.setActivityTitle(currDir);
 					list_dirs = mDirectoryOperate.ls_al(currDir);
 					mAdapter.notifyDataSetChanged();
 					return;
@@ -156,7 +156,7 @@ public class FileViewerFragment extends ListFragment implements
 				currDir = mDirectoryOperate.backToParentDir(currDir);
 				list_dirs = mDirectoryOperate.ls_al(currDir);
 				mAdapter.notifyDataSetChanged();
-				mContext.setTitle(currDir);
+				mContext.setActivityTitle(currDir);
 			}
 		default:
 			break;

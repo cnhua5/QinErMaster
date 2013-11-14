@@ -13,7 +13,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public final class MimeUtils {
-	
+
 	private static final String TAG = "MimeUtils";
 
 	public static String MIMETYPE_UNKNOWN = "MIMETPE_UNKNOWN";
@@ -36,7 +36,7 @@ public final class MimeUtils {
 			mimeType = "video/*";
 		else if (mimeType.compareTo(MIMETYPE_UNKNOWN) == 0 || mimeType == null)
 			mimeType = "application/*";
-		
+
 		intent.setDataAndType(Uri.fromFile(file), mimeType);
 		try {
 			((Activity) context).startActivity(intent);
@@ -65,6 +65,14 @@ public final class MimeUtils {
 			}
 		}
 		return mimeType;
+	}
+
+	public static boolean isTextMIME(String fName) {
+		String mime = getMIME(fName);
+		if (mime.startsWith("text")) {
+			return true;
+		}
+		return false;
 	}
 
 	static {
