@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.widget.Toast;
+import cn.yu.master.activities.ClockListFragment;
 import cn.yu.master.activities.FragmentKeyListener;
 import cn.yu.master.activities.SuperImageFragment;
 import cn.yu.master.utils.DirectoryOperate;
@@ -53,8 +54,7 @@ public class LeftAndRightActivity extends BaseActivity {
 	public void switchPageViewContent(int position) {
 		switch (position) {
 		case 0:
-			replace(R.id.content_frame, new SampleListFragment(new String[] {
-					"......", "....." }));
+			replace(R.id.content_frame, new ClockListFragment());
 			mSlidingMenu.setStatic(false);
 			break;
 		case 1:
