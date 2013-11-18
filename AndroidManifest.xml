@@ -51,10 +51,15 @@
         </service>
         
         <receiver android:name="cn.yu.master.services.TimerReceiver">
-            <intent-filter >
-                <action android:name="android.intent.action.TIME_SET"/>
+            <intent-filter>
+                <action android:name="cn.yu.master.ALARM"/>
             </intent-filter>
         </receiver>
+        
+        <provider android:name="cn.yu.master.services.QAlarmProvider" 
+            android:authorities="cn.yu.master"
+            android:exported="false">
+        </provider>
     </application>
 
 </manifest>
