@@ -18,7 +18,6 @@ public class QAlarmDatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		Log.e(TABLE_NAME, "create table................");
 		db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
                 "_id INTEGER PRIMARY KEY," +
                 "hour INTEGER, " +

@@ -1,21 +1,24 @@
 package cn.yu.master.activities;
 
+import java.util.ArrayList;
+
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.yu.master.R;
+import cn.yu.master.entries.Alarm;
 import cn.yu.master.entries.AlarmObject;
+import cn.yu.master.services.AlarmsHandler;
 import cn.yu.master.services.QAlarmManager;
 
 public class ClockListFragment extends Fragment implements OnClickListener {
@@ -32,7 +35,7 @@ public class ClockListFragment extends Fragment implements OnClickListener {
 
 	private ListView ALARM_LIST;
 
-	private Cursor mCursor;
+	private ArrayList<AlarmObject> alarms;
 
 	private QAlarmManager mQAlarmManager;
 
@@ -55,9 +58,18 @@ public class ClockListFragment extends Fragment implements OnClickListener {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		mQAlarmManager = new QAlarmManager();
-		mCursor = mQAlarmManager.queryAlarms(mContext.getContentResolver());
-		ClockAdapter mAdapter = new ClockAdapter(mCursor);
-		ALARM_LIST.setAdapter(mAdapter);
+		Alarm alarm = new Alarm(mContext);
+
+		AlarmsHandler alarmsHandler = new AlarmsHandler();
+		alarms = alarmsHandler.getAlarmsFromCursor(mQAlarmManager
+				.queryAlarms(mContext.getContentResolver()));
+		if (alarms != null) {
+			ClockAdapter mAdapter = new ClockAdapter();
+			ALARM_LIST.setAdapter(mAdapter);
+		}
+		long lastestAlarmMillis = alarmsHandler.getLastestAlarm(alarms);
+		alarm.setAlarm(lastestAlarmMillis);
+		
 	}
 
 	@Override
@@ -69,38 +81,46 @@ public class ClockListFragment extends Fragment implements OnClickListener {
 		}
 	}
 
-	class ClockAdapter extends CursorAdapter {
-
-		public ClockAdapter(Cursor c) {
-			super(mContext, c);
-		}
+	class ClockAdapter extends BaseAdapter {
 
 		class ViewHolder {
 			TextView date;
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			return super.getView(position, convertView, parent);
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return alarms.size();
 		}
 
 		@Override
-		public void bindView(View view, Context context, Cursor cursor) {
-			ViewHolder holder = (ViewHolder) view.getTag();
-			int hour = mCursor
-					.getInt(AlarmObject.QAlarmColumns.ALARM_HOUR_INDEX);
-			int min = mCursor
-					.getInt(AlarmObject.QAlarmColumns.ALARM_MINUTES_INDEX);
-			holder.date.setText(hour + "时" + min + "分");
+		public Object getItem(int arg0) {
+			// TODO Auto-generated method stub
+			return alarms.get(arg0);
 		}
 
 		@Override
-		public View newView(Context context, Cursor cursor, ViewGroup parent) {
-			View view = LayoutInflater.from(mContext).inflate(
-					R.layout.alarm_list_item, null);
-			ViewHolder holder = new ViewHolder();
-			holder.date = (TextView) view.findViewById(R.id.alarm_list_date);
-			view.setTag(holder);
+		public long getItemId(int arg0) {
+			// TODO Auto-generated method stub
+			return arg0;
+		}
+
+		@Override
+		public View getView(int arg0, View arg1, ViewGroup arg2) {
+			View view = arg1;
+			ViewHolder holder = null;
+			if (arg1 == null) {
+				view = LayoutInflater.from(mContext).inflate(
+						R.layout.alarm_list_item, null);
+				holder = new ViewHolder();
+				holder.date = (TextView) view
+						.findViewById(R.id.alarm_list_date);
+				view.setTag(holder);
+			} else {
+				holder = (ViewHolder) arg1.getTag();
+			}
+			AlarmObject obj = alarms.get(arg0);
+			holder.date.setText(obj.hour + "时" + obj.minutes + "分");
 			return view;
 		}
 	}

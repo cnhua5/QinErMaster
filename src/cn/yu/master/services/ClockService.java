@@ -52,12 +52,8 @@ public class ClockService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		android.util.Log.e("----------------", "TimerRingService-----");
-		if (intent == null) {
-			stopSelf();
-			return START_NOT_STICKY;
-		}
-
+		android.util.Log.e("----------------", "TimerRingService  start...-----");
+		startForeground(0, null);
 		play();
 		mInitialCallState = mTelephonyManager.getCallState();
 
@@ -85,8 +81,8 @@ public class ClockService extends Service {
 		try {
 			if (mTelephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
 				mMediaPlayer.setVolume(IN_CALL_VOLUME, IN_CALL_VOLUME);
-//				setDataSourceFromResource(getResources(), mMediaPlayer,
-//						R.raw.in_call_alarm);
+				// setDataSourceFromResource(getResources(), mMediaPlayer,
+				// R.raw.in_call_alarm);
 			} else {
 				AssetFileDescriptor afd = getAssets().openFd(
 						"sounds/Timer_Expire.ogg");
@@ -98,8 +94,8 @@ public class ClockService extends Service {
 			try {
 				// Must reset the media player to clear the error state.
 				mMediaPlayer.reset();
-//				setDataSourceFromResource(getResources(), mMediaPlayer,
-//						R.raw.fallbackring);
+				// setDataSourceFromResource(getResources(), mMediaPlayer,
+				// R.raw.fallbackring);
 				startAlarm(mMediaPlayer);
 			} catch (Exception ex2) {
 				ex2.printStackTrace();

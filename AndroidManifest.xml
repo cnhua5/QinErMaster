@@ -36,6 +36,7 @@
         <activity
             android:name="cn.yu.master.WelcomeActivity"
             android:screenOrientation="portrait"
+            android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

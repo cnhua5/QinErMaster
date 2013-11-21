@@ -11,5 +11,7 @@ public class TimerReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
 		Log.e("----------", "alarm going off....");
+		Intent service = new Intent("cn.yu.master.services.ClockService");
+		context.startService(service);
 	}
 }

@@ -1,6 +1,7 @@
 package cn.yu.master.entries;
 
 import java.text.DateFormatSymbols;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,10 +10,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 public class AlarmObject {
 
-	public String modeName;
+	private static final String tag = "AlarmObject";
 
 	public int id;
 	public boolean enabled;
@@ -23,18 +25,23 @@ public class AlarmObject {
 	public String label;
 	public String alertString;
 
-	public AlarmObject(Cursor c) {
-		id = c.getInt(QAlarmColumns.ALARM_ID_INDEX);
-		enabled = c.getInt(QAlarmColumns.ALARM_ENABLED_INDEX) == 1;
-		hour = c.getInt(QAlarmColumns.ALARM_HOUR_INDEX);
-		minutes = c.getInt(QAlarmColumns.ALARM_MINUTES_INDEX);
-		daysOfWeek = new DaysOfWeek(
-				c.getInt(QAlarmColumns.ALARM_DAYS_OF_WEEK_INDEX));
-		time = c.getLong(QAlarmColumns.ALARM_TIME_INDEX);
-		label = c.getString(QAlarmColumns.ALARM_MESSAGE_INDEX);
-		alertString = c.getString(QAlarmColumns.ALARM_ALERT_INDEX);
+	public AlarmObject() {
 	}
 
+	@Override
+    public String toString() {
+        return "Alarm{" +
+                "alert=" + alertString +
+                ", id=" + id +
+                ", enabled=" + enabled +
+                ", hour=" + hour +
+                ", minutes=" + minutes +
+                ", daysOfWeek=" + daysOfWeek +
+                ", time=" + time +
+                ", label='" + label + '\'' +
+                '}';
+    }
+	
 	public static class QAlarmColumns implements BaseColumns {
 
 		public static final Uri CONTENT_URI = Uri
@@ -72,7 +79,7 @@ public class AlarmObject {
 		public static final int ALARM_ALERT_INDEX = 7;
 	}
 
-	static final class DaysOfWeek {
+	public static final class DaysOfWeek {
 
 		private static int[] DAY_MAP = new int[] { Calendar.MONDAY,
 				Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY,
@@ -87,7 +94,7 @@ public class AlarmObject {
 
 		private int mDays;
 
-		DaysOfWeek(int days) {
+		public DaysOfWeek(int days) {
 			mDays = days;
 		}
 
@@ -104,7 +111,7 @@ public class AlarmObject {
 			StringBuilder ret = new StringBuilder();
 
 			if (mDays == 0) {
-				return showNever ? "-------" : "";
+				return showNever ? "never" : "";
 			}
 
 			if (mDays == 0x7f) {
@@ -127,7 +134,7 @@ public class AlarmObject {
 					ret.append(dayList[DAY_MAP[i]]);
 					dayCount -= 1;
 					if (dayCount > 0)
-						ret.append("|");
+						ret.append(", ");
 				}
 			}
 			return ret.toString();
@@ -184,9 +191,7 @@ public class AlarmObject {
 			if (mDays == 0) {
 				return -1;
 			}
-
 			int today = (c.get(Calendar.DAY_OF_WEEK) + 5) % 7;
-
 			int day = 0;
 			int dayCount = 0;
 			for (; dayCount < 7; dayCount++) {
