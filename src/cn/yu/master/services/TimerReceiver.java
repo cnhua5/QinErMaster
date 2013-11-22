@@ -9,9 +9,8 @@ public class TimerReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		String action = intent.getAction();
-		Log.e("----------", "alarm going off....");
 		Intent service = new Intent("cn.yu.master.services.ClockService");
+		service.putExtra("alarm", true);
 		context.startService(service);
-	}
+	} 
 }

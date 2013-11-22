@@ -3,6 +3,7 @@ package cn.yu.master.activities;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import android.widget.Toast;
 import cn.yu.master.R;
 import cn.yu.master.entries.Alarm;
 import cn.yu.master.entries.AlarmObject;
-import cn.yu.master.services.AlarmsHandler;
+import cn.yu.master.services.AlarmsContentHandler;
 import cn.yu.master.services.QAlarmManager;
 
 public class ClockListFragment extends Fragment implements OnClickListener {
@@ -60,16 +61,15 @@ public class ClockListFragment extends Fragment implements OnClickListener {
 		mQAlarmManager = new QAlarmManager();
 		Alarm alarm = new Alarm(mContext);
 
-		AlarmsHandler alarmsHandler = new AlarmsHandler();
+		AlarmsContentHandler alarmsHandler = new AlarmsContentHandler();
 		alarms = alarmsHandler.getAlarmsFromCursor(mQAlarmManager
-				.queryAlarms(mContext.getContentResolver()));
+				.queryAlarms(mContext.getContentResolver(),1));
 		if (alarms != null) {
 			ClockAdapter mAdapter = new ClockAdapter();
 			ALARM_LIST.setAdapter(mAdapter);
 		}
 		long lastestAlarmMillis = alarmsHandler.getLastestAlarm(alarms);
 		alarm.setAlarm(lastestAlarmMillis);
-		
 	}
 
 	@Override
@@ -89,19 +89,16 @@ public class ClockListFragment extends Fragment implements OnClickListener {
 
 		@Override
 		public int getCount() {
-			// TODO Auto-generated method stub
 			return alarms.size();
 		}
 
 		@Override
 		public Object getItem(int arg0) {
-			// TODO Auto-generated method stub
 			return alarms.get(arg0);
 		}
 
 		@Override
 		public long getItemId(int arg0) {
-			// TODO Auto-generated method stub
 			return arg0;
 		}
 

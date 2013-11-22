@@ -39,8 +39,7 @@ public class LeftAndRightActivity extends BaseActivity {
 		mFragmentManager = getSupportFragmentManager();
 		setContentView(R.layout.content_frame);
 
-		replace(R.id.content_frame, new SampleListFragment(new String[] {
-				"content!!!!", "content!!!!" }));
+		replace(R.id.content_frame, new ClockListFragment());
 		// mSlidingMenu.setSecondaryMenu(R.layout.menu_frame_two);
 		// mSlidingMenu.setSecondaryShadowDrawable(R.drawable.shadowright);
 		// replace(R.id.menu_frame_two, new SampleListFragment(new String[] {

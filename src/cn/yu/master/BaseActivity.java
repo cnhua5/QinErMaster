@@ -19,7 +19,7 @@ public abstract class BaseActivity extends SlidingFragmentActivity {
 		super();
 		this.mTitleRes = mTitleRes;
 	}
-	
+
 	public void setActivityTitle(String title) {
 		setTitle(title);
 	}
@@ -35,8 +35,8 @@ public abstract class BaseActivity extends SlidingFragmentActivity {
 		if (savedInstanceState == null) {
 			FragmentTransaction t = this.getSupportFragmentManager()
 					.beginTransaction();
-			mFrag = new LeftListFragment(
-					new String[] { "读一读", "Images", "其他" },
+			mFrag = new LeftListFragment(new String[] { "Monday", "Tuesday",
+					"Wednesday", "Thursday", "Friday", "Saturday", "Sunday" },
 					new LeftListFragment.ActivityCallBack() {
 
 						@Override

@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 public class Alarm {
-	
+
 	private static final String tag = "Alarm";
 
 	private AlarmManager mAlarmManager;
@@ -22,11 +22,13 @@ public class Alarm {
 	}
 
 	public void setAlarm(long millis) {
-		Intent intent = new Intent("cn.yu.master.ALARM");
-		PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, intent,
-				PendingIntent.FLAG_CANCEL_CURRENT);
-		long now = System.currentTimeMillis();
-		mAlarmManager.set(AlarmManager.RTC_WAKEUP, millis, pi);
+		if (millis >= 0) {
+			Intent intent = new Intent("cn.yu.master.ALARM");
+			PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, intent,
+					PendingIntent.FLAG_CANCEL_CURRENT);
+			long now = System.currentTimeMillis();
+			mAlarmManager.set(AlarmManager.RTC_WAKEUP, millis, pi);
+		}
 	}
 
 	public void setRepeatAlarm() {
@@ -34,9 +36,8 @@ public class Alarm {
 		PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, intent,
 				PendingIntent.FLAG_CANCEL_CURRENT);
 		long atTimeMillis = System.currentTimeMillis() + 10000;
-		mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-				atTimeMillis, 900000, pi);
+		mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, atTimeMillis,
+				900000, pi);
 	}
-	
-	
+
 }

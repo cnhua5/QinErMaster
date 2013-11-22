@@ -7,18 +7,27 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import cn.yu.master.utils.AlarmAlertWakeLock;
 
 public class ClockService extends Service {
+
+	private static final String tag = "ClockService";
+
+	private static final float IN_CALL_VOLUME = 0.125f;
 
 	private boolean mPlaying = false;
 	private MediaPlayer mMediaPlayer;
 	private TelephonyManager mTelephonyManager;
 	private int mInitialCallState;
+	private int loopCount = 1;
+
+	private String alarmAudioPath;
 
 	private final PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
 		@Override
@@ -40,6 +49,7 @@ public class ClockService extends Service {
 
 	@Override
 	public void onDestroy() {
+		Log.e(tag, "Clock Service destory.....");
 		stop();
 		mTelephonyManager.listen(mPhoneStateListener, 0);
 		AlarmAlertWakeLock.releaseCpuLock();
@@ -52,15 +62,16 @@ public class ClockService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		android.util.Log.e("----------------", "TimerRingService  start...-----");
-		startForeground(0, null);
+		if (intent == null) {
+			stopSelf();
+			return START_NOT_STICKY;
+		}
+		android.util.Log.e("----------------", "TimerRingService  start..");
+		alarmAudioPath = intent.getStringExtra("AlarmAudioPath");
 		play();
 		mInitialCallState = mTelephonyManager.getCallState();
-
 		return START_STICKY;
 	}
-
-	private static final float IN_CALL_VOLUME = 0.125f;
 
 	private void play() {
 
@@ -77,6 +88,17 @@ public class ClockService extends Service {
 				return true;
 			}
 		});
+		mMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+
+			@Override
+			public void onCompletion(MediaPlayer mp) {
+				Log.e(tag, "play complete.....loopCount = " + loopCount);
+				if (loopCount > 0) {
+					mp.start();
+					loopCount--;
+				}
+			}
+		});
 
 		try {
 			if (mTelephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
@@ -84,10 +106,14 @@ public class ClockService extends Service {
 				// setDataSourceFromResource(getResources(), mMediaPlayer,
 				// R.raw.in_call_alarm);
 			} else {
-				AssetFileDescriptor afd = getAssets().openFd(
-						"sounds/Timer_Expire.ogg");
-				mMediaPlayer.setDataSource(afd.getFileDescriptor(),
-						afd.getStartOffset(), afd.getLength());
+				if (alarmAudioPath != null) {
+					mMediaPlayer.setDataSource(alarmAudioPath);
+				} else {
+					AssetFileDescriptor afd = getAssets().openFd(
+							"sounds/song.mp3");
+					mMediaPlayer.setDataSource(afd.getFileDescriptor(),
+							afd.getStartOffset(), afd.getLength());
+				}
 			}
 			startAlarm(mMediaPlayer);
 		} catch (Exception ex) {
@@ -101,7 +127,6 @@ public class ClockService extends Service {
 				ex2.printStackTrace();
 			}
 		}
-
 		mPlaying = true;
 	}
 
@@ -110,10 +135,17 @@ public class ClockService extends Service {
 		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
 			player.setAudioStreamType(AudioManager.STREAM_ALARM);
-			player.setLooping(true);
+			player.setVolume((float) 0.1, (float) 0.1);
 			player.prepare();
+			loopCount = setLoopPlayCount(player.getDuration());
 			player.start();
 		}
+	}
+
+	private int setLoopPlayCount(long duration) {
+		int loopCount = Math.round((60 * 1000) / duration);
+		Log.e(tag, "loop count is " + loopCount + "  duration = " + duration);
+		return loopCount;
 	}
 
 	private void setDataSourceFromResource(Resources resources,
