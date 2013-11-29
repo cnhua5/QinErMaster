@@ -18,9 +18,7 @@ public class QAlarmProvider extends ContentProvider {
 
 	private static final int Q_ALARM = 1;
 	private static final int Q_ALARM_ID = 2;
-	private static final int Q_MONDAY = 3;
-	private static final int Q_MONDAY_ID = 4;
-	
+
 	private static final String Q_ID = "_id=";
 
 	private static final UriMatcher mUriMatcher = new UriMatcher(
@@ -31,8 +29,6 @@ public class QAlarmProvider extends ContentProvider {
 	static {
 		mUriMatcher.addURI("cn.yu.master", "alarm", Q_ALARM);
 		mUriMatcher.addURI("cn.yu.master", "alarm/#", Q_ALARM_ID);
-		mUriMatcher.addURI("cn.yu.master", "monday", Q_MONDAY);
-		mUriMatcher.addURI("cn.yu.master", "monday/#", Q_MONDAY_ID);
 	}
 
 	@Override
@@ -107,14 +103,6 @@ public class QAlarmProvider extends ContentProvider {
 			builder.appendWhere(Q_ID);
 			builder.appendWhere(uri.getPathSegments().get(1));
 			break;
-		case Q_MONDAY:
-			builder.setTables(QAlarmDatabaseHelper.TABLE_MON_NAME);
-			break;
-		case Q_MONDAY_ID:
-			builder.setTables(QAlarmDatabaseHelper.TABLE_MON_NAME);
-			builder.appendWhere(Q_ID);
-			builder.appendWhere(uri.getPathSegments().get(1));
-			break;
 		default:
 			throw new IllegalArgumentException("Unknown URL " + uri);
 		}
@@ -169,7 +157,7 @@ public class QAlarmProvider extends ContentProvider {
 				}
 			}
 
-			rowId = db.insert("alarms", "message", values);
+			rowId = db.insert("alarms", null, values);
 			db.setTransactionSuccessful();
 		} finally {
 			db.endTransaction();

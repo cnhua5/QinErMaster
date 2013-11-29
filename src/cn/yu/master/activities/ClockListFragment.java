@@ -6,6 +6,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,12 +16,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import cn.yu.master.R;
 import cn.yu.master.entries.Alarm;
 import cn.yu.master.entries.AlarmObject;
-import cn.yu.master.services.AlarmsContentHandler;
-import cn.yu.master.services.QAlarmManager;
+import cn.yu.master.services.AlarmServiceManager;
+import cn.yu.master.services.AlarmServiceManager.AlarmContentListener;
 
 public class ClockListFragment extends Fragment implements OnClickListener {
 
@@ -38,7 +38,7 @@ public class ClockListFragment extends Fragment implements OnClickListener {
 
 	private ArrayList<AlarmObject> alarms;
 
-	private QAlarmManager mQAlarmManager;
+	private AlarmServiceManager mAlarmServiceManager;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,24 +58,32 @@ public class ClockListFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mQAlarmManager = new QAlarmManager();
 		Alarm alarm = new Alarm(mContext);
 
-		AlarmsContentHandler alarmsHandler = new AlarmsContentHandler();
-		alarms = alarmsHandler.getAlarmsFromCursor(mQAlarmManager
-				.queryAlarms(mContext.getContentResolver(),1));
+		mAlarmServiceManager = new AlarmServiceManager(mContext);
+		mAlarmServiceManager.setOnAlarmContentListener(new AlarmContentListener() {
+			
+			@Override
+			public void contentChange(boolean selfChange, Uri uri) {
+				Log.e(TAG, "selfChange = " + selfChange + "  uir = " + uri.getPath());
+			}
+		});
+		alarms = mAlarmServiceManager.getAllAlarms();
 		if (alarms != null) {
 			ClockAdapter mAdapter = new ClockAdapter();
 			ALARM_LIST.setAdapter(mAdapter);
 		}
-		long lastestAlarmMillis = alarmsHandler.getLastestAlarm(alarms);
+		long lastestAlarmMillis = mAlarmServiceManager.getLastestAlarm(alarms);
 		alarm.setAlarm(lastestAlarmMillis);
 	}
 
 	@Override
 	public void onClick(View v) {
 		if (v == ADD_ALARM) {
-			Toast.makeText(mContext, "Add new Alarm!!!!", 1000).show();
+			AlarmObject obj = new AlarmObject();
+			obj.hour = Integer.parseInt(HOUR.getText().toString());
+			obj.minutes = Integer.parseInt(MINUTE.getText().toString());
+			mAlarmServiceManager.addAlarm(obj);
 		} else if (v == AM_PM) {
 			AM_PM.setText("AM".equals(AM_PM.getText()) ? "PM" : "AM");
 		}
@@ -85,6 +93,7 @@ public class ClockListFragment extends Fragment implements OnClickListener {
 
 		class ViewHolder {
 			TextView date;
+			Button enable;
 		}
 
 		@Override
@@ -112,12 +121,24 @@ public class ClockListFragment extends Fragment implements OnClickListener {
 				holder = new ViewHolder();
 				holder.date = (TextView) view
 						.findViewById(R.id.alarm_list_date);
+				holder.enable = (Button) view
+						.findViewById(R.id.alarm_list_enable);
 				view.setTag(holder);
 			} else {
 				holder = (ViewHolder) arg1.getTag();
 			}
-			AlarmObject obj = alarms.get(arg0);
+			final AlarmObject obj = alarms.get(arg0);
 			holder.date.setText(obj.hour + "时" + obj.minutes + "分");
+			holder.enable.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Log.e(TAG, "update enable....");
+					AlarmObject objj = obj;
+					objj.enabled = !obj.enabled;
+					mAlarmServiceManager.updateAlarm(objj);
+				}
+			});
 			return view;
 		}
 	}

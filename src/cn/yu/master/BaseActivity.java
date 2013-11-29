@@ -35,8 +35,7 @@ public abstract class BaseActivity extends SlidingFragmentActivity {
 		if (savedInstanceState == null) {
 			FragmentTransaction t = this.getSupportFragmentManager()
 					.beginTransaction();
-			mFrag = new LeftListFragment(new String[] { "Monday", "Tuesday",
-					"Wednesday", "Thursday", "Friday", "Saturday", "Sunday" },
+			mFrag = new LeftListFragment(new String[] { "Alarm", "File" },
 					new LeftListFragment.ActivityCallBack() {
 
 						@Override
