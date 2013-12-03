@@ -7,7 +7,7 @@
     <ListView
         android:id="@+id/alarm_list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"/>
 
     <LinearLayout
         android:id="@+id/alarm_add_set"

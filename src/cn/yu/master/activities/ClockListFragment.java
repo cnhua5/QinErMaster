@@ -11,9 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import cn.yu.master.R;
@@ -21,12 +26,13 @@ import cn.yu.master.entries.Alarm;
 import cn.yu.master.entries.AlarmObject;
 import cn.yu.master.services.AlarmServiceManager;
 import cn.yu.master.services.AlarmServiceManager.AlarmContentListener;
+import cn.yu.master.viewers.MenuView;
 
 public class ClockListFragment extends Fragment implements OnClickListener {
 
-	private static final String TAG = "ClockListFragment";
+	private static final String tag = "ClockListFragment";
 
-	private View rootView;
+	private FrameLayout rootView;
 	private Context mContext;
 
 	private TextView AM_PM;
@@ -43,7 +49,7 @@ public class ClockListFragment extends Fragment implements OnClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.text_super, null);
+		rootView = (FrameLayout) inflater.inflate(R.layout.text_super, null);
 		mContext = rootView.getContext();
 		ADD_ALARM = (Button) rootView.findViewById(R.id.alarm_add_bt);
 		ADD_ALARM.setOnClickListener(this);
@@ -52,6 +58,20 @@ public class ClockListFragment extends Fragment implements OnClickListener {
 		HOUR = (EditText) rootView.findViewById(R.id.alarm_time_hour);
 		MINUTE = (EditText) rootView.findViewById(R.id.alarm_time_min);
 		ALARM_LIST = (ListView) rootView.findViewById(R.id.alarm_list);
+		ALARM_LIST.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View view,
+					int arg2, long arg3) {
+				Log.e(tag, "add MenuView......");
+				MenuView mv = new MenuView(mContext, view.getY());
+				LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT,
+						LayoutParams.MATCH_PARENT);
+				mv.setLayoutParams(lp);
+				rootView.addView(mv);
+				return true;
+			}
+		});
 		return rootView;
 	}
 
@@ -61,13 +81,15 @@ public class ClockListFragment extends Fragment implements OnClickListener {
 		Alarm alarm = new Alarm(mContext);
 
 		mAlarmServiceManager = new AlarmServiceManager(mContext);
-		mAlarmServiceManager.setOnAlarmContentListener(new AlarmContentListener() {
-			
-			@Override
-			public void contentChange(boolean selfChange, Uri uri) {
-				Log.e(TAG, "selfChange = " + selfChange + "  uir = " + uri.getPath());
-			}
-		});
+		mAlarmServiceManager
+				.setOnAlarmContentListener(new AlarmContentListener() {
+
+					@Override
+					public void contentChange(boolean selfChange, Uri uri) {
+						Log.e(tag, "selfChange = " + selfChange + "  uir = "
+								+ uri.getPath());
+					}
+				});
 		alarms = mAlarmServiceManager.getAllAlarms();
 		if (alarms != null) {
 			ClockAdapter mAdapter = new ClockAdapter();
@@ -133,7 +155,7 @@ public class ClockListFragment extends Fragment implements OnClickListener {
 
 				@Override
 				public void onClick(View v) {
-					Log.e(TAG, "update enable....");
+					Log.e(tag, "update enable....");
 					AlarmObject objj = obj;
 					objj.enabled = !obj.enabled;
 					mAlarmServiceManager.updateAlarm(objj);
