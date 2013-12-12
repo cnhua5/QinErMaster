@@ -43,8 +43,9 @@ public class MenuView extends RelativeLayout {
 			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
 					LayoutParams.WRAP_CONTENT);
 			double angel = 30 * (3 - i) - 45;
-			double x = 100 * Math.cos(angel);
-			double y = 100 * Math.sin(angel) + viewY;
+			double x = 200 * Math.cos(angel);
+			double y = Math.abs(200 * Math.sin(angel)) + viewY;
+			Log.e(tag, "200 * Math.sin(angel) = " + 200 * Math.sin(angel));
 			Log.e(tag, "(x,y) = (" + x + ", " + y + ")" + "angel = " + angel);
 			lp.leftMargin = (int) x;
 			lp.topMargin = (int) y;
